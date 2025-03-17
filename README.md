@@ -20,3 +20,15 @@ const options = {
 
 await fetchSha256(options)
 ```
+
+If you wish to use the hash function without the fetch, you can use the `hashBody` function:
+
+```javascript
+const hashedBody = hashBody(body)
+
+const headers = {
+    ...otherHeaders,
+    'Content-Type': 'application/json',
+    'x-amz-content-sha256': hashedBody
+}
+```
