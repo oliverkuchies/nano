@@ -3,6 +3,7 @@ Fetch with automatically embedded amz-content-sha256 header to comply with AWS C
 
 How to use:
 
+```javascript
 import { fetchSha256 } from "amz-content-sha256-fetch";
 
 const url = 'https://example.mangos'
