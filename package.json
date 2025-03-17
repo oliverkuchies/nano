@@ -1,6 +1,6 @@
 {
   "name": "amz-content-sha256-fetch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utilise amz-content-sha256 header automatically inferred from content in fetch",
   "main": "dist/index.js",
   "scripts": {
