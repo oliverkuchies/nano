@@ -9,7 +9,7 @@ export function hashBody(body : unknown) {
     return sha256(bodyAsString)
 }
 
-export async function fetchWithSha256Headers(url: string, options: RequestInit = {}) {
+export async function fetchSha256(url: string, options: RequestInit = {}) {
     if (options.body === undefined) {
         return fetch(url, options)
     }

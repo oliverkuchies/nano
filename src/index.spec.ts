@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { AWS_CONTENT_SHA256_HEADER, fetchWithSha256Headers, hashBody } from './index'
+import { AWS_CONTENT_SHA256_HEADER, fetchSha256, hashBody } from './index'
 import createFetchMock from 'vitest-fetch-mock';
 
 beforeEach(() => {
@@ -73,7 +73,7 @@ describe('fetchWithSha256Headers', () => {
             }
         }
         
-        const response = await fetchWithSha256Headers(url, options)
+        const response = await fetchSha256(url, options)
         expect(response.status).toBe(200)
     })
 })
