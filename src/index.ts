@@ -9,6 +9,13 @@ export function hashBody(body : unknown) {
     return sha256(bodyAsString)
 }
 
+export function mutateHeaders(headers: HeadersInit, body: unknown) {
+    return {
+        ...headers,
+        [AWS_CONTENT_SHA256_HEADER]: hashBody(body)
+    }
+}
+
 export async function fetchSha256(url: string, options: RequestInit = {}) {
     if (options.body === undefined) {
         return fetch(url, options)
@@ -16,10 +23,7 @@ export async function fetchSha256(url: string, options: RequestInit = {}) {
 
     const optionsWithHashedHeader = {
         ...options,
-        headers: {
-            ...options.headers,
-            [AWS_CONTENT_SHA256_HEADER]: hashBody(options.body)
-        }
+        headers: mutateHeaders(options.headers ?? {}, options.body)
     }
 
     return fetch(url, optionsWithHashedHeader)

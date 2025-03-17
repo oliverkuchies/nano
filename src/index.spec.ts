@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { AWS_CONTENT_SHA256_HEADER, fetchSha256, hashBody } from './index'
+import { AWS_CONTENT_SHA256_HEADER, fetchSha256, hashBody, mutateHeaders } from './index'
 import createFetchMock from 'vitest-fetch-mock';
 
 beforeEach(() => {
@@ -77,3 +77,17 @@ describe('fetchWithSha256Headers', () => {
         expect(response.status).toBe(200)
     })
 })
+
+describe('mutateHeaders', () => {
+    it('should add the hashed body to the headers', () => {
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        const body = { key: 'bobs-bananas', 'mango': 'fruit' }
+        const expectedHash = '8a573ca735c107f6545e687ef82913a9f3b50310b7f4c6b013fc4bacf63f11d4'
+        
+        const result = mutateHeaders(headers, body)
+        
+        expect(result[AWS_CONTENT_SHA256_HEADER]).toBe(expectedHash)
+    })
+});
