@@ -5,6 +5,10 @@ import {
 export const AWS_CONTENT_SHA256_HEADER = 'x-amz-content-sha256'
 
 export function hashBody(body : unknown) {
+    if (typeof body === 'string') {
+        return sha256(body).replace(/\n/g, '')
+    }
+    
     const bodyAsString = JSON.stringify(body).replace(/\/\n/g, '\n');
     return sha256(bodyAsString)
 }
