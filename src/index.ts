@@ -1,34 +1,44 @@
-import {
-    sha256
-} from 'js-sha256'
-
-export const AWS_CONTENT_SHA256_HEADER = 'x-amz-content-sha256'
-
-export function hashBody(body : unknown) {
-    if (typeof body === 'string') {
-        return sha256(body).replace(/\n/g, '')
-    }
-    
-    const bodyAsString = JSON.stringify(body).replace(/\/\n/g, '\n');
-    return sha256(bodyAsString)
+type NanoInstance<InitialState = unknown> = 
+{
+    value: InitialState
 }
 
-export function mutateHeaders(headers: HeadersInit, body: unknown) {
-    return {
-        ...headers,
-        [AWS_CONTENT_SHA256_HEADER]: hashBody(body)
-    }
+const stateHashmap : Record<string, unknown> = {};
+
+function storeInMap<InitialState>(identifier: string, instance: NanoInstance<InitialState>) {
+    stateHashmap[identifier] = instance;
+    return instance;
 }
 
-export async function fetchSha256(url: string, options: RequestInit = {}) {
-    if (options.body === undefined) {
-        return fetch(url, options)
-    }
-
-    const optionsWithHashedHeader = {
-        ...options,
-        headers: mutateHeaders(options.headers ?? {}, options.body)
-    }
-
-    return fetch(url, optionsWithHashedHeader)
+function findOrCreateState<InitialState>(identifier: string, initialState: InitialState) : NanoInstance<InitialState> {
+    return storeInMap(identifier, createState<InitialState>(initialState))
 }
+
+function createState<InitialState>(initialState: InitialState) : NanoInstance<InitialState> {
+    let currentState : InitialState = initialState;
+
+    function setState(value : InitialState) {
+        currentState = value;
+    }
+
+    const state = new Proxy(
+        {
+            value: currentState
+        },
+        {
+            get: () => {
+                return currentState; 
+            },
+            set: (_obj, _prop, value) => {
+                setState(value);
+                return true;
+            }
+        }
+    );
+
+    return state
+}
+
+export function useNano<InitialState>(identifier : string, initialState : InitialState) : NanoInstance<InitialState> {
+    return findOrCreateState<InitialState>(identifier, initialState);
+} 

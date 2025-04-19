@@ -1,7 +1,7 @@
 {
-  "name": "amz-content-sha256-fetch",
-  "version": "1.0.5",
-  "description": "Utilise amz-content-sha256 header automatically inferred from content in fetch",
+  "name": "nano",
+  "version": "1.0.0",
+  "description": "Nano-sized state management tool",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -13,29 +13,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oliverkuchies/amz-content-sha256-fetch.git"
+    "url": "git+https://github.com/oliverkuchies/nano.git"
   },
   "keywords": [
-    "aws",
-    "sha256",
-    "aws-content-sha256"
+    "state management",
+    "javascript"
   ],
   "author": "Oliver Kucharzewski",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/oliverkuchies/amz-content-sha256-fetch/issues"
+    "url": "https://github.com/oliverkuchies/nano/issues"
   },
-  "homepage": "https://github.com/oliverkuchies/amz-content-sha256-fetch#readme",
+  "homepage": "https://github.com/oliverkuchies/nano#readme",
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "eslint": "^9.22.0",
-    "globals": "^16.0.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
-  },
-  "dependencies": {
-    "js-sha256": "^0.11.0",
-    "vitest-fetch-mock": "^0.4.5"
   }
 }
