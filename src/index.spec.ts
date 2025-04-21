@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest'
-import { useNano } from './index';
+import { stateHashmap, useNano } from './index';
 it('should create a state, and it should allow for incrementing multiple times', () => {
     const counter = useNano('counter', 1);
     expect(counter.value).toBe(1);
@@ -14,4 +14,13 @@ it('should create a state, and it should allow for incrementing multiple times',
     expect(name.value).toBe('george')
 
     expect(counter.value).toBe(3);
+
+    expect(JSON.stringify(stateHashmap)).toEqual(JSON.stringify({
+        counter: {
+            value: 3
+        },
+        name: {
+            value: "george"
+        }
+    }));
 });

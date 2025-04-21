@@ -3,22 +3,23 @@ type NanoInstance<InitialState = unknown> =
     value: InitialState
 }
 
-const stateHashmap : Record<string, unknown> = {};
+export const stateHashmap : Record<string, unknown> = {};
 
 function storeInMap<InitialState>(identifier: string, instance: NanoInstance<InitialState>) {
     stateHashmap[identifier] = instance;
     return instance;
 }
 
-function findOrCreateState<InitialState>(identifier: string, initialState: InitialState) : NanoInstance<InitialState> {
-    return storeInMap(identifier, createState<InitialState>(initialState))
+function findAndUpdateOrCreateState<InitialState>(identifier: string, initialState: InitialState) : NanoInstance<InitialState> {
+    return storeInMap(identifier, createState<InitialState>(initialState, identifier))
 }
 
-function createState<InitialState>(initialState: InitialState) : NanoInstance<InitialState> {
+function createState<InitialState>(initialState: InitialState, identifier: string) : NanoInstance<InitialState> {
     let currentState : InitialState = initialState;
 
     function setState(value : InitialState) {
         currentState = value;
+        findAndUpdateOrCreateState(identifier, value);
     }
 
     const state = new Proxy(
@@ -40,5 +41,5 @@ function createState<InitialState>(initialState: InitialState) : NanoInstance<In
 }
 
 export function useNano<InitialState>(identifier : string, initialState : InitialState) : NanoInstance<InitialState> {
-    return findOrCreateState<InitialState>(identifier, initialState);
+    return findAndUpdateOrCreateState<InitialState>(identifier, initialState);
 } 
